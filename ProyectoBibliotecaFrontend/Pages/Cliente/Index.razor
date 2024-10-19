@@ -1,0 +1,69 @@
+﻿@page "/cliente/index"
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject ILocalStorageService _localStorageService
+
+<MudText Typo="Typo.h2" Class="ml">Cliente</MudText>
+
+<MudTable Items="@clientes" Dense="true" Hover="true" Bordered="true" Striped="true">
+    <ToolBarContent>
+        <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="goAdd" />
+        <MudSpacer />
+        <MudTextField @bind-Value="searchText" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>Nombre</MudTh>
+        <MudTh>Direccion</MudTh>
+        <MudTh>Correo</MudTh>
+        <MudTh>Telefono</MudTh>
+        <MudTh>Fecha Registro</MudTh>
+        <MudTh>Estado</MudTh>
+        <MudTh>Acciones</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+    <MudTd DataLabel="Id">@context.Id</MudTd>
+    <MudTd DataLabel="Nombre">@context.Nombre</MudTd>
+    <MudTd DataLabel="Direccion">@context.Direccion</MudTd>
+    <MudTd DataLabel="Correo">@context.Correo</MudTd>
+    <MudTd DataLabel="Telefono">@context.Telefono</MudTd>
+    <MudTd DataLabel="Fecha Registro">@context.FechaRegistro.</MudTd>
+    <MudTd DataLabel="Estado">
+            <MudSwitch @bind-Checked="context.Estado" Disabled="true" T="bool" />
+    </MudTd>
+    <MudTd DataLabel="Acciones">
+        <MudButton Href="@($"/cliente/editar/{context.Id}")" Size="Size.Small" Variant="Variant.Outlined"
+                   Color="Color.Tertiary" Class="text-center">Editar</MudButton>
+        <MudButton Href="@($"/cliente/eliminar/{context.Id}")" Size="Size.Small" Variant="Variant.Outlined"
+                   Color="Color.Warning" Class="text-center">Eliminar</MudButton>
+    </MudTd>
+</RowTemplate>
+
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code {
+    private IEnumerable<Cliente> clientes = new List<Cliente>();
+    private string searchText = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        httpClient.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", await _localStorageService.GetItemAsync<string>("token"));
+        await getAll();
+    }
+
+    private async Task getAll()
+    {
+        var httpResponse = await httpClient.GetStringAsync("clientes/lista");
+        clientes = JsonSerializer.Deserialize<IEnumerable<Cliente>>(httpResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+    }
+
+    private void goAdd()
+    {
+        navigationManager.NavigateTo("cliente/agregar");
+    }
+
+}
