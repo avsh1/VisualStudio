@@ -101,3 +101,14 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+
+.custom-datepicker .mud-picker {
+    font-size: 0.6rem; /* Reduce el tamaño del texto dentro del calendario */
+    width: 240px; /* Ajusta el ancho del calendario */
+}
+
+.custom-datepicker .mud-picker-calendar-day {
+    height: 20px; /* Reduce la altura de cada celda de día */
+    width: 10px; /* Reduce el ancho de cada celda de día */
+}
+

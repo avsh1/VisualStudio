@@ -12,9 +12,9 @@
                 <DataAnnotationsValidator />
                 <MudCard>
                     <MudCardContent>
+                        <MudDatePicker Label="Fecha de Registro" @bind-Date="fechaRegistro" Class="custom-datepicker" />
                         <MudTextField Label="Nombre" @bind-Value="cliente.Nombre" For="@(() => cliente.Nombre)" />
                         <MudTextField Label="Dirección" @bind-Value="cliente.Direccion" For="@(() => cliente.Direccion)" />
-                        <MudDatePicker Label="Fecha de Registro" @bind-Date="fechaRegistro" />
                         <MudTextField Label="Correo" @bind-Value="cliente.Correo" For="@(() => cliente.Correo)" />
                         <MudTextField Label="Telefono" @bind-Value="cliente.Telefono" For="@(() => cliente.Telefono)" />
                         <MudSwitch @bind-Checked="cliente.Estado" Label="Activo" T="bool" />
